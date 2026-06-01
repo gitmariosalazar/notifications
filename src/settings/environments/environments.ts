@@ -26,6 +26,10 @@ interface EnvironmentsVariables {
   NOTIFICATIONS_KAFKA_CLIENT: string;
   KAFKA_BROKER_INTERNAL: string;
   KAFKA_BROKER_EXTERNAL: string;
+  WHATSAPP_ACCESS_TOKEN?: string;
+  WHATSAPP_PHONE_NUMBER_ID?: string;
+  WHATSAPP_VERSION?: string;
+  WHATSAPP_TEMPLATE_NAME?: string;
 }
 
 const environmentsSchema = Joi.object<EnvironmentsVariables>({
@@ -48,6 +52,10 @@ const environmentsSchema = Joi.object<EnvironmentsVariables>({
   NOTIFICATIONS_KAFKA_CLIENT: Joi.string().required(),
   KAFKA_BROKER_INTERNAL: Joi.string().required(),
   KAFKA_BROKER_EXTERNAL: Joi.string().required(),
+  WHATSAPP_ACCESS_TOKEN: Joi.string().optional().allow(''),
+  WHATSAPP_PHONE_NUMBER_ID: Joi.string().optional().allow(''),
+  WHATSAPP_VERSION: Joi.string().default('v19.0'),
+  WHATSAPP_TEMPLATE_NAME: Joi.string().optional().allow(''),
 }).unknown(true);
 
 const { error, value: envVars } = environmentsSchema.validate(process.env);
@@ -75,4 +83,8 @@ export const environments: EnvironmentsVariables = {
   NOTIFICATIONS_KAFKA_CLIENT: envVars.NOTIFICATIONS_KAFKA_CLIENT,
   KAFKA_BROKER_EXTERNAL: envVars.KAFKA_BROKER_EXTERNAL,
   KAFKA_BROKER_INTERNAL: envVars.KAFKA_BROKER_INTERNAL,
+  WHATSAPP_ACCESS_TOKEN: envVars.WHATSAPP_ACCESS_TOKEN ?? '',
+  WHATSAPP_PHONE_NUMBER_ID: envVars.WHATSAPP_PHONE_NUMBER_ID ?? '',
+  WHATSAPP_VERSION: envVars.WHATSAPP_VERSION ?? 'v19.0',
+  WHATSAPP_TEMPLATE_NAME: envVars.WHATSAPP_TEMPLATE_NAME ?? '',
 };

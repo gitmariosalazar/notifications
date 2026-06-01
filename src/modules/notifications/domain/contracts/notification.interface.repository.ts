@@ -41,6 +41,12 @@ export interface INotificationRepository {
   /** Retorna el correo electrónico del usuario desde public.usuarios */
   findUserEmail(userId: string): Promise<string | null>;
 
+  /** Retorna el número de teléfono/celular del cliente desde public.telefono */
+  findUserPhone(userId: string): Promise<string | null>;
+
+  /** Retorna nombres + apellidos del usuario (empleado o cliente) */
+  findUserName(userId: string): Promise<string | null>;
+
   /** Registra e inserta un intento de despacho de un proveedor externo */
   updateDispatchStatus(
     notificationId: string,

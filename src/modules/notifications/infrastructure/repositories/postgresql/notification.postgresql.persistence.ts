@@ -125,11 +125,68 @@ export class NotificationPostgreSQLPersistence implements INotificationRepositor
   }
 
   async findUserEmail(userId: string): Promise<string | null> {
-    const rows = await this.db.query<{ email: string }>(
+    // 1. Buscar primero en la tabla de empleados (usuarios)
+    const empRows = await this.db.query<{ email: string }>(
       `SELECT email FROM public.usuarios WHERE usuario_id = $1 AND activo = TRUE`,
       [userId]
     );
-    return rows[0]?.email ?? null;
+    if (empRows.length > 0) return empRows[0].email;
+
+    // 2. Buscar en cliente_usuario sin filtrar por is_active:
+    //    Los usuarios recién registrados aún no están verificados (is_active = false)
+    //    pero deben recibir el correo de verificación.
+    //    Solo excluimos cuentas eliminadas (deleted_at IS NOT NULL).
+    const clientRows = await this.db.query<{ email: string }>(
+      `SELECT email FROM public.cliente_usuario WHERE cliente_usuario_id = $1 AND deleted_at IS NULL`,
+      [userId]
+    );
+    return clientRows[0]?.email ?? null;
+  }
+
+  async findUserPhone(userId: string): Promise<string | null> {
+    // 1. Buscar en la tabla public.cliente_usuario uniendo con public.telefono para números validados
+    const rows = await this.db.query<{ numero: string }>(
+      `SELECT t.numero 
+       FROM public.cliente_usuario cu
+       JOIN public.telefono t ON t.cliente_id = cu.cliente_id
+       WHERE cu.cliente_usuario_id = $1 AND cu.is_active = TRUE AND cu.deleted_at IS NULL AND t.es_valido = TRUE
+       ORDER BY t.created_at DESC 
+       LIMIT 1`,
+      [userId]
+    );
+    if (rows.length > 0) return rows[0].numero;
+    
+    // Fallback: Si no hay número validado, intentar obtener el número más reciente del cliente
+    const rowsFallback = await this.db.query<{ numero: string }>(
+      `SELECT t.numero 
+       FROM public.cliente_usuario cu
+       JOIN public.telefono t ON t.cliente_id = cu.cliente_id
+       WHERE cu.cliente_usuario_id = $1 AND cu.is_active = TRUE AND cu.deleted_at IS NULL
+       ORDER BY t.created_at DESC 
+       LIMIT 1`,
+      [userId]
+    );
+    return rowsFallback[0]?.numero ?? null;
+  }
+
+  async findUserName(userId: string): Promise<string | null> {
+    // 1. Buscar en empleados (analistas, técnicos, etc.)
+    const empRows = await this.db.query<{ nombres: string; apellidos: string }>(
+      `SELECT e.nombres, e.apellidos
+       FROM public.empleados e
+       WHERE e.usuario_id = $1`,
+      [userId],
+    );
+    if (empRows.length > 0) {
+      return `${empRows[0].nombres} ${empRows[0].apellidos}`.trim();
+    }
+
+    // 2. Fallback: clientes del portal (usan username como nombre de visualización)
+    const clientRows = await this.db.query<{ username: string }>(
+      `SELECT username FROM public.usuarios WHERE usuario_id = $1`,
+      [userId],
+    );
+    return clientRows[0]?.username ?? null;
   }
 
   async updateDispatchStatus(

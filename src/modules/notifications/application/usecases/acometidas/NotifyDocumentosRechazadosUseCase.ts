@@ -23,7 +23,7 @@ export class NotifyDocumentosRechazadosUseCase {
       title: '📄 Documentos No Válidos — Acometida',
       body: `Sus documentos para la solicitud de nueva acometida han sido revisados y presentan observaciones: "${dto.motivo}". ` +
         `Por favor, ingrese al sistema para corregir y volver a cargar la documentación.`,
-      channel: 'EMAIL', // Despacho físico de correo al cliente
+      channel: 'EMAIL,WHATSAPP,IN_APP', // Despacho multicanal simultáneo al cliente
       priority: 'HIGH',
       entityType: 'acometidas.solicitud',
       entityId: dto.solicitudId as unknown as any,

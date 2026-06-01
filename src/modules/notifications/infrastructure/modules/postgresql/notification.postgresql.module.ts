@@ -20,6 +20,13 @@ import { EmailSenderProvider } from '../../services/email/email-sender.provider'
 import { EmailChannelSender } from '../../services/channels/email-channel.sender';
 import { SmsChannelSender } from '../../services/channels/sms-channel.sender';
 import { PushChannelSender } from '../../services/channels/push-channel.sender';
+import { WhatsappChannelSender } from '../../services/channels/whatsapp-channel.sender';
+// Template engine
+import { HtmlTemplateService } from '../../services/template/html-template.service';
+// Use Cases — Auth
+import { NotifyVerificationCodeUseCase } from '../../../application/usecases/auth/NotifyVerificationCodeUseCase';
+// Use Cases — Acometidas (confirmación)
+import { NotifyAcometidaConfirmacionUseCase } from '../../../application/usecases/acometidas/NotifyAcometidaConfirmacionUseCase';
 
 @Module({
   imports: [DatabasePersistenceModule],
@@ -42,21 +49,34 @@ import { PushChannelSender } from '../../services/channels/push-channel.sender';
     NotifyInformeRechazadoUseCase,
     NotifySuministroActivoUseCase,
     NotifyDocsSubmittedUseCase,
+    NotifyAcometidaConfirmacionUseCase,
+    // Use Cases — Auth
+    NotifyVerificationCodeUseCase,
+    // Template engine (DIP: callers inject ITemplateService, not the concrete class)
+    HtmlTemplateService,
+    {
+      provide: 'ITemplateService',
+      useClass: HtmlTemplateService,
+    },
     // Proveedores Multicanal
     EmailSenderProvider,
 
-    // Estrategias de canales registradas bajo el mismo Token (Multi-providers)
+    // Registrar clases concretas para inyección
+    EmailChannelSender,
+    SmsChannelSender,
+    PushChannelSender,
+    WhatsappChannelSender,
+
+    // Proveedor Factory que junta todas las estrategias en un arreglo (Evita sobreescritura de NestJS)
     {
       provide: 'INotificationChannelSender',
-      useClass: EmailChannelSender,
-    },
-    {
-      provide: 'INotificationChannelSender',
-      useClass: SmsChannelSender,
-    },
-    {
-      provide: 'INotificationChannelSender',
-      useClass: PushChannelSender,
+      useFactory: (
+        email: EmailChannelSender,
+        sms: SmsChannelSender,
+        push: PushChannelSender,
+        whatsapp: WhatsappChannelSender,
+      ) => [email, sms, push, whatsapp],
+      inject: [EmailChannelSender, SmsChannelSender, PushChannelSender, WhatsappChannelSender],
     },
   ],
   exports: [],

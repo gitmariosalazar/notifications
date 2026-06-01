@@ -10,6 +10,7 @@ import { NotifyDocumentosRechazadosUseCase } from '../../application/usecases/ac
 import { NotifyInformeRechazadoUseCase } from '../../application/usecases/acometidas/NotifyInformeRechazadoUseCase';
 import { NotifySuministroActivoUseCase } from '../../application/usecases/acometidas/NotifySuministroActivoUseCase';
 import { NotifyDocsSubmittedUseCase } from '../../application/usecases/acometidas/NotifyDocsSubmittedUseCase';
+import { NotifyAcometidaConfirmacionUseCase } from '../../application/usecases/acometidas/NotifyAcometidaConfirmacionUseCase';
 
 /**
  * NotificationController — Adaptador de entrada Kafka.
@@ -33,6 +34,7 @@ export class NotificationController {
     private readonly notifyInformeRechazadoUseCase: NotifyInformeRechazadoUseCase,
     private readonly notifySuministroActivoUseCase: NotifySuministroActivoUseCase,
     private readonly notifyDocsSubmittedUseCase: NotifyDocsSubmittedUseCase,
+    private readonly notifyAcometidaConfirmacionUseCase: NotifyAcometidaConfirmacionUseCase,
   ) {}
 
   // ── Operaciones genéricas ─────────────────────────────────────────────────
@@ -101,9 +103,47 @@ export class NotificationController {
 
   @MessagePattern('notifications.acometidas.docs_submitted')
   async notifyDocsSubmitted(
-    @Payload() payload: { userId: string; solicitudId: string; numDocumentos: number; metadata?: Record<string, any> },
+    @Payload() payload: {
+      userId:           string;
+      solicitudId:      string;
+      numDocumentos:    number;
+      numeroSolicitud?: string;
+      tipoAcometida?:  string;
+      tipoPersona?:    string;
+      direccion?:      string;
+      claveCatastral?: string;
+      metadata?:       Record<string, any>;
+    },
   ) {
     this.logger.log(`[notifications.acometidas.docs_submitted] solicitud: ${payload.solicitudId}, docs: ${payload.numDocumentos}`);
     return await this.notifyDocsSubmittedUseCase.execute(payload);
+  }
+
+  @MessagePattern('notifications.acometidas.acometida_confirmacion')
+  async notifyAcometidaConfirmacion(
+    @Payload() payload: {
+      userId:          string;
+      solicitudId:     string;
+      nombre?:         string;
+      numeroSolicitud?: string;
+      tipoAcometida?:  string;
+      tipoPersona?:    string;
+      direccion?:      string;
+      claveCatastral?: string;
+      numDocumentos?:  number;
+    },
+  ) {
+    this.logger.log(`[notifications.acometidas.acometida_confirmacion] solicitud: ${payload.solicitudId}, user: ${payload.userId}`);
+    return await this.notifyAcometidaConfirmacionUseCase.execute({
+      userId:          payload.userId,
+      solicitudId:     payload.solicitudId,
+      nombre:          payload.nombre          ?? 'Cliente',
+      numeroSolicitud: payload.numeroSolicitud  ?? payload.solicitudId.slice(0, 8).toUpperCase(),
+      tipoAcometida:   payload.tipoAcometida   ?? 'Nueva Acometida de Agua Potable',
+      tipoPersona:     payload.tipoPersona     ?? 'No especificado',
+      direccion:       payload.direccion        ?? 'No especificada',
+      claveCatastral:  payload.claveCatastral  ?? 'No disponible',
+      numDocumentos:   payload.numDocumentos    ?? 0,
+    });
   }
 }

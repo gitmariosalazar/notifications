@@ -23,7 +23,7 @@ export class NotifyInformeRechazadoUseCase {
       title: '🔧 Inspección Técnica — Resultado Desfavorable',
       body: `Lamentamos informarle que la inspección técnica de su solicitud de nueva acometida no ha sido aprobada. ` +
         `Motivo: "${dto.motivoRechazo}". Puede comunicarse con nuestras oficinas para más información.`,
-      channel: 'EMAIL', // Correo electrónico oficial
+      channel: 'EMAIL,WHATSAPP,IN_APP', // Despacho multicanal simultáneo
       priority: 'HIGH',
       entityType: 'acometidas.solicitud',
       entityId: dto.solicitudId as unknown as any,

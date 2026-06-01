@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Solicitud de Acometida Recibida — EPAA</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      background-color: #f0f4f8;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-wrapper {
+      width: 100%; background: #f0f4f8; padding: 40px 0;
+    }
+    .email-container {
+      max-width: 600px; margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    }
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 60%, #7c3aed 100%);
+      padding: 36px 40px 48px;
+      text-align: center;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: #ffffff;
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+    .logo-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .logo-icon {
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .logo-text {
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.95);
+      font-size: 12px; font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+    }
+    /* ── Body ── */
+    .body { padding: 36px 40px; }
+    .greeting {
+      font-size: 22px; font-weight: 700;
+      color: #0f172a; margin: 0 0 10px;
+    }
+    .intro-text {
+      font-size: 15px; color: #475569;
+      line-height: 1.7; margin: 0 0 28px;
+    }
+    /* ── Status card ── */
+    .status-card {
+      background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+      border: 2px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin: 0 0 28px;
+      text-align: center;
+    }
+    .status-icon { font-size: 40px; margin-bottom: 8px; display: block; }
+    .status-label {
+      font-size: 12px; font-weight: 700;
+      color: #16a34a; text-transform: uppercase;
+      letter-spacing: 1.5px; margin: 0 0 4px;
+    }
+    .status-text {
+      font-size: 18px; font-weight: 800;
+      color: #0f172a; margin: 0;
+    }
+    /* ── Info table ── */
+    .info-title {
+      font-size: 14px; font-weight: 700;
+      color: #0f172a; margin: 0 0 14px;
+    }
+    .info-table {
+      width: 100%; border-collapse: collapse;
+      margin: 0 0 28px;
+    }
+    .info-table tr { border-bottom: 1px solid #e2e8f0; }
+    .info-table tr:last-child { border-bottom: none; }
+    .info-table td {
+      padding: 11px 0;
+      font-size: 14px;
+      vertical-align: top;
+    }
+    .info-label {
+      color: #64748b; font-weight: 600;
+      width: 45%;
+    }
+    .info-value {
+      color: #0f172a; font-weight: 500;
+      text-align: right;
+    }
+    .info-value strong { color: #1d4ed8; }
+    /* ── Timeline ── */
+    .timeline-title {
+      font-size: 14px; font-weight: 700;
+      color: #0f172a; margin: 0 0 16px;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+      margin: 0 0 28px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 9px; top: 14px; bottom: 14px;
+      width: 2px;
+      background: linear-gradient(to bottom, #1d4ed8, #e2e8f0);
+    }
+    .tl-item {
+      position: relative;
+      padding: 0 0 20px 28px;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute;
+      left: 0; top: 2px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #1d4ed8;
+      background: #1d4ed8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+    }
+    .tl-dot--pending {
+      background: #fff;
+      box-shadow: 0 0 0 2px #cbd5e1;
+    }
+    .tl-label {
+      font-size: 14px; font-weight: 700;
+      color: #0f172a; margin: 0 0 2px;
+    }
+    .tl-label--pending { color: #94a3b8; }
+    .tl-desc {
+      font-size: 12px; color: #64748b;
+      margin: 0;
+    }
+    /* ── Documents section ── */
+    .docs-warning {
+      background: #fef9c3;
+      border-left: 4px solid #eab308;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      margin: 0 0 28px;
+    }
+    .docs-warning p {
+      font-size: 13px; color: #713f12;
+      margin: 0; line-height: 1.6;
+    }
+    /* ── CTA ── */
+    .cta-wrapper { text-align: center; margin: 0 0 28px; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff !important;
+      text-decoration: none;
+      font-size: 15px; font-weight: 700;
+      padding: 14px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+      letter-spacing: 0.3px;
+    }
+    /* ── Support ── */
+    .support-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-align: center;
+      margin: 0 0 8px;
+    }
+    .support-box p {
+      font-size: 13px; color: #64748b;
+      margin: 0 0 8px; line-height: 1.6;
+    }
+    .support-contact {
+      display: inline-flex; align-items: center;
+      gap: 18px; flex-wrap: wrap; justify-content: center;
+    }
+    .support-item {
+      font-size: 13px; color: #1d4ed8;
+      text-decoration: none; font-weight: 600;
+    }
+    /* ── Footer ── */
+    .footer {
+      background: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+    }
+    .footer-org {
+      font-size: 13px; font-weight: 700;
+      color: #1d4ed8; margin: 0 0 4px;
+    }
+    .footer-text {
+      font-size: 12px; color: #94a3b8;
+      margin: 0; line-height: 1.6;
+    }
+    .footer-links { margin-top: 12px; }
+    .footer-link {
+      font-size: 12px; color: #64748b;
+      text-decoration: none; margin: 0 8px;
+    }
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 28px 0; }
+    @media (max-width: 600px) {
+      .email-container { border-radius: 0; }
+      .body, .footer { padding: 24px 20px; }
+      .header { padding: 28px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-container">
+
+      <!-- ── Header ── -->
+      <div class="header">
+        <div class="logo-wrapper">
+          <div class="logo-icon">💧</div>
+          <span class="logo-text">EPAA</span>
+        </div>
+        <div class="header-badge">📋 Solicitud Recibida</div>
+      </div>
+
+      <!-- ── Body ── -->
+      <div class="body">
+        <h1 class="greeting">¡Solicitud enviada, {{nombre}}!</h1>
+        <p class="intro-text">
+          Hemos recibido tu solicitud de <strong>Nueva Acometida de Agua Potable</strong>.
+          A continuación encontrarás el resumen y los próximos pasos del proceso.
+        </p>
+
+        <!-- Status Card -->
+        <div class="status-card">
+          <span class="status-icon">✅</span>
+          <p class="status-label">Estado de la solicitud</p>
+          <p class="status-text">Recibida — En revisión documental</p>
+        </div>
+
+        <!-- Info Table -->
+        <p class="info-title">📄 Detalles de tu solicitud</p>
+        <table class="info-table">
+          <tr>
+            <td class="info-label">N° de Solicitud</td>
+            <td class="info-value"><strong>{{numeroSolicitud}}</strong></td>
+          </tr>
+          <tr>
+            <td class="info-label">Tipo de trámite</td>
+            <td class="info-value">{{tipoAcometida}}</td>
+          </tr>
+          <tr>
+            <td class="info-label">Tipo de persona</td>
+            <td class="info-value">{{tipoPersona}}</td>
+          </tr>
+          <tr>
+            <td class="info-label">Dirección del predio</td>
+            <td class="info-value">{{direccion}}</td>
+          </tr>
+          <tr>
+            <td class="info-label">Clave catastral</td>
+            <td class="info-value">{{claveCatastral}}</td>
+          </tr>
+          <tr>
+            <td class="info-label">Documentos adjuntos</td>
+            <td class="info-value">{{numDocumentos}} archivo(s)</td>
+          </tr>
+          <tr>
+            <td class="info-label">Fecha de solicitud</td>
+            <td class="info-value">{{fechaSolicitud}}</td>
+          </tr>
+        </table>
+
+        <hr class="divider" />
+
+        <!-- Timeline -->
+        <p class="timeline-title">🗺️ Proceso de tu solicitud</p>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot">✓</div>
+            <p class="tl-label">Solicitud recibida</p>
+            <p class="tl-desc">Tu solicitud fue registrada exitosamente en el sistema</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot--pending"></div>
+            <p class="tl-label tl-label--pending">Revisión documental</p>
+            <p class="tl-desc">Un analista EPAA revisará tus documentos adjuntos</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot--pending"></div>
+            <p class="tl-label tl-label--pending">Inspección técnica</p>
+            <p class="tl-desc">Se programará una visita técnica al predio</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot--pending"></div>
+            <p class="tl-label tl-label--pending">Emisión de facturas</p>
+            <p class="tl-desc">Se generará el cobro por materiales e instalación</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot--pending"></div>
+            <p class="tl-label tl-label--pending">Activación del servicio</p>
+            <p class="tl-desc">El medidor será instalado y el servicio activado</p>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Docs warning -->
+        <div class="docs-warning">
+          <p>
+            📎 <strong>Importante:</strong> Si tu solicitud requiere documentos adicionales,
+            un analista EPAA se comunicará contigo a través del portal o al correo registrado.
+            Puedes dar seguimiento a tu solicitud en tiempo real desde el portal de clientes.
+          </p>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-wrapper">
+          <a href="{{urlSeguimiento}}" class="cta-btn">
+            Ver seguimiento en el portal →
+          </a>
+        </div>
+
+        <!-- Support -->
+        <div class="support-box">
+          <p>¿Tienes preguntas sobre tu solicitud? Estamos aquí para ayudarte.</p>
+          <div class="support-contact">
+            <a href="tel:+593032423000" class="support-item">📞 (03) 242-3000</a>
+            <a href="mailto:soporte@epaa.gob.ec" class="support-item">✉️ soporte@epaa.gob.ec</a>
+            <a href="{{portalUrl}}" class="support-item">🌐 Portal EPAA</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Footer ── -->
+      <div class="footer">
+        <p class="footer-org">EPAA — Empresa Pública de Agua y Alcantarillado de Ambato</p>
+        <p class="footer-text">
+          Este correo fue enviado automáticamente al registrar tu solicitud N° {{numeroSolicitud}}.<br />
+          Por favor no respondas a este mensaje directamente.
+        </p>
+        <div class="footer-links">
+          <a href="{{portalUrl}}" class="footer-link">Portal de Clientes</a>
+          <a href="{{portalUrl}}/privacy" class="footer-link">Privacidad</a>
+          <a href="{{portalUrl}}/terms" class="footer-link">Términos</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

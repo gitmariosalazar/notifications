@@ -25,7 +25,7 @@ export class NotifySuministroActivoUseCase {
       title: '✅ ¡Suministro de Agua Activado!',
       body: `Su nueva acometida ha sido instalada y activada exitosamente. ` +
         `Número de cuenta: ${dto.numeroCuenta} — Número de medidor: ${dto.numeroMedidor}. Bienvenido a los servicios de EPAA-AA.`,
-      channel: 'EMAIL', // Correo electrónico oficial del cliente
+      channel: 'EMAIL,WHATSAPP,IN_APP', // Despacho multicanal simultáneo oficial al cliente
       priority: 'URGENT',
       entityType: 'acometidas.solicitud',
       entityId: dto.solicitudId as unknown as any,

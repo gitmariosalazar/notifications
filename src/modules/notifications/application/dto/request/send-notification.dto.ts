@@ -5,7 +5,7 @@ export interface SendNotificationDto {
   userId: string;
   title: string;
   body: string;
-  channel?: NotificationChannel;
+  channel?: string;
   priority?: NotificationPriority;
   entityType?: string;
   entityId?: string;
