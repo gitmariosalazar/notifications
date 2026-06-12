@@ -14,6 +14,10 @@ import { NotifyDocumentosRechazadosUseCase } from '../../../application/usecases
 import { NotifyInformeRechazadoUseCase } from '../../../application/usecases/acometidas/NotifyInformeRechazadoUseCase';
 import { NotifySuministroActivoUseCase } from '../../../application/usecases/acometidas/NotifySuministroActivoUseCase';
 import { NotifyDocsSubmittedUseCase } from '../../../application/usecases/acometidas/NotifyDocsSubmittedUseCase';
+import { NotifyInspeccionAsignadaUseCase } from '../../../application/usecases/acometidas/NotifyInspeccionAsignadaUseCase';
+import { NotifyOtInstalacionEmitidaUseCase } from '../../../application/usecases/acometidas/NotifyOtInstalacionEmitidaUseCase';
+import { NotifyInformeSubidoUseCase } from '../../../application/usecases/acometidas/NotifyInformeSubidoUseCase';
+import { NotifyInformeAprobadoUseCase } from '../../../application/usecases/acometidas/NotifyInformeAprobadoUseCase';
 
 // Proveedores Físicos y Estrategias de Despacho (Strategy Pattern)
 import { EmailSenderProvider } from '../../services/email/email-sender.provider';
@@ -49,6 +53,10 @@ import { NotifyAcometidaConfirmacionUseCase } from '../../../application/usecase
     NotifyInformeRechazadoUseCase,
     NotifySuministroActivoUseCase,
     NotifyDocsSubmittedUseCase,
+    NotifyInspeccionAsignadaUseCase,
+    NotifyOtInstalacionEmitidaUseCase,
+    NotifyInformeSubidoUseCase,
+    NotifyInformeAprobadoUseCase,
     NotifyAcometidaConfirmacionUseCase,
     // Use Cases — Auth
     NotifyVerificationCodeUseCase,
@@ -76,7 +84,12 @@ import { NotifyAcometidaConfirmacionUseCase } from '../../../application/usecase
         push: PushChannelSender,
         whatsapp: WhatsappChannelSender,
       ) => [email, sms, push, whatsapp],
-      inject: [EmailChannelSender, SmsChannelSender, PushChannelSender, WhatsappChannelSender],
+      inject: [
+        EmailChannelSender,
+        SmsChannelSender,
+        PushChannelSender,
+        WhatsappChannelSender,
+      ],
     },
   ],
   exports: [],

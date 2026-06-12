@@ -11,6 +11,10 @@ import { NotifyInformeRechazadoUseCase } from '../../application/usecases/acomet
 import { NotifySuministroActivoUseCase } from '../../application/usecases/acometidas/NotifySuministroActivoUseCase';
 import { NotifyDocsSubmittedUseCase } from '../../application/usecases/acometidas/NotifyDocsSubmittedUseCase';
 import { NotifyAcometidaConfirmacionUseCase } from '../../application/usecases/acometidas/NotifyAcometidaConfirmacionUseCase';
+import { NotifyInspeccionAsignadaUseCase } from '../../application/usecases/acometidas/NotifyInspeccionAsignadaUseCase';
+import { NotifyOtInstalacionEmitidaUseCase } from '../../application/usecases/acometidas/NotifyOtInstalacionEmitidaUseCase';
+import { NotifyInformeSubidoUseCase } from '../../application/usecases/acometidas/NotifyInformeSubidoUseCase';
+import { NotifyInformeAprobadoUseCase } from '../../application/usecases/acometidas/NotifyInformeAprobadoUseCase';
 
 /**
  * NotificationController — Adaptador de entrada Kafka.
@@ -35,6 +39,10 @@ export class NotificationController {
     private readonly notifySuministroActivoUseCase: NotifySuministroActivoUseCase,
     private readonly notifyDocsSubmittedUseCase: NotifyDocsSubmittedUseCase,
     private readonly notifyAcometidaConfirmacionUseCase: NotifyAcometidaConfirmacionUseCase,
+    private readonly notifyInspeccionAsignadaUseCase: NotifyInspeccionAsignadaUseCase,
+    private readonly notifyOtInstalacionEmitidaUseCase: NotifyOtInstalacionEmitidaUseCase,
+    private readonly notifyInformeSubidoUseCase: NotifyInformeSubidoUseCase,
+    private readonly notifyInformeAprobadoUseCase: NotifyInformeAprobadoUseCase,
   ) {}
 
   // ── Operaciones genéricas ─────────────────────────────────────────────────
@@ -46,15 +54,27 @@ export class NotificationController {
   }
 
   @MessagePattern('notifications.get_unread')
-  async getUnread(@Payload() payload: { userId: string; limit?: number; offset?: number }) {
+  async getUnread(
+    @Payload() payload: { userId: string; limit?: number; offset?: number },
+  ) {
     this.logger.log(`[notifications.get_unread] user: ${payload.userId}`);
-    return await this.getUnreadUseCase.execute(payload.userId, payload.limit, payload.offset);
+    return await this.getUnreadUseCase.execute(
+      payload.userId,
+      payload.limit,
+      payload.offset,
+    );
   }
 
   @MessagePattern('notifications.get_all')
-  async getAll(@Payload() payload: { userId: string; limit?: number; offset?: number }) {
+  async getAll(
+    @Payload() payload: { userId: string; limit?: number; offset?: number },
+  ) {
     this.logger.log(`[notifications.get_all] user: ${payload.userId}`);
-    return await this.getAllUseCase.execute(payload.userId, payload.limit, payload.offset);
+    return await this.getAllUseCase.execute(
+      payload.userId,
+      payload.limit,
+      payload.offset,
+    );
   }
 
   @MessagePattern('notifications.get_unread_count')
@@ -64,9 +84,16 @@ export class NotificationController {
   }
 
   @MessagePattern('notifications.mark_as_read')
-  async markAsRead(@Payload() payload: { notificationId: string; userId: string }) {
-    this.logger.log(`[notifications.mark_as_read] notif: ${payload.notificationId}`);
-    return await this.markAsReadUseCase.execute(payload.notificationId, payload.userId);
+  async markAsRead(
+    @Payload() payload: { notificationId: string; userId: string },
+  ) {
+    this.logger.log(
+      `[notifications.mark_as_read] notif: ${payload.notificationId}`,
+    );
+    return await this.markAsReadUseCase.execute(
+      payload.notificationId,
+      payload.userId,
+    );
   }
 
   @MessagePattern('notifications.mark_all_as_read')
@@ -79,71 +106,166 @@ export class NotificationController {
 
   @MessagePattern('notifications.acometidas.docs_rechazados')
   async notifyDocsRechazados(
-    @Payload() payload: { userId: string; solicitudId: string; motivo: string; metadata?: Record<string, any> },
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      motivo: string;
+      metadata?: Record<string, any>;
+    },
   ) {
-    this.logger.log(`[notifications.acometidas.docs_rechazados] solicitud: ${payload.solicitudId}`);
+    this.logger.log(
+      `[notifications.acometidas.docs_rechazados] solicitud: ${payload.solicitudId}`,
+    );
     return await this.notifyDocsRechazadosUseCase.execute(payload);
   }
 
   @MessagePattern('notifications.acometidas.informe_rechazado')
   async notifyInformeRechazado(
-    @Payload() payload: { userId: string; solicitudId: string; motivoRechazo: string; metadata?: Record<string, any> },
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      motivoRechazo: string;
+      metadata?: Record<string, any>;
+    },
   ) {
-    this.logger.log(`[notifications.acometidas.informe_rechazado] solicitud: ${payload.solicitudId}`);
+    this.logger.log(
+      `[notifications.acometidas.informe_rechazado] solicitud: ${payload.solicitudId}`,
+    );
     return await this.notifyInformeRechazadoUseCase.execute(payload);
   }
 
   @MessagePattern('notifications.acometidas.suministro_activo')
   async notifySuministroActivo(
-    @Payload() payload: { userId: string; solicitudId: string; numeroCuenta: string; numeroMedidor: string; metadata?: Record<string, any> },
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      numeroCuenta: string;
+      numeroMedidor: string;
+      metadata?: Record<string, any>;
+    },
   ) {
-    this.logger.log(`[notifications.acometidas.suministro_activo] solicitud: ${payload.solicitudId}`);
+    this.logger.log(
+      `[notifications.acometidas.suministro_activo] solicitud: ${payload.solicitudId}`,
+    );
     return await this.notifySuministroActivoUseCase.execute(payload);
   }
 
   @MessagePattern('notifications.acometidas.docs_submitted')
   async notifyDocsSubmitted(
-    @Payload() payload: {
-      userId:           string;
-      solicitudId:      string;
-      numDocumentos:    number;
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      numDocumentos: number;
       numeroSolicitud?: string;
-      tipoAcometida?:  string;
-      tipoPersona?:    string;
-      direccion?:      string;
+      tipoAcometida?: string;
+      tipoPersona?: string;
+      direccion?: string;
       claveCatastral?: string;
-      metadata?:       Record<string, any>;
+      metadata?: Record<string, any>;
     },
   ) {
-    this.logger.log(`[notifications.acometidas.docs_submitted] solicitud: ${payload.solicitudId}, docs: ${payload.numDocumentos}`);
+    this.logger.log(
+      `[notifications.acometidas.docs_submitted] solicitud: ${payload.solicitudId}, docs: ${payload.numDocumentos}`,
+    );
     return await this.notifyDocsSubmittedUseCase.execute(payload);
+  }
+
+  @MessagePattern('notifications.acometidas.inspeccion_asignada')
+  async notifyInspeccionAsignada(
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      direccion: string;
+      metadata?: Record<string, unknown>;
+    },
+  ) {
+    this.logger.log(
+      `[notifications.acometidas.inspeccion_asignada] solicitud: ${payload.solicitudId}`,
+    );
+    return await this.notifyInspeccionAsignadaUseCase.execute(payload);
+  }
+
+  @MessagePattern('notifications.acometidas.ot_instalacion_emitida')
+  async notifyOtInstalacionEmitida(
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      codigoOT: string;
+      metadata?: Record<string, unknown>;
+    },
+  ) {
+    this.logger.log(
+      `[notifications.acometidas.ot_instalacion_emitida] solicitud: ${payload.solicitudId}`,
+    );
+    return await this.notifyOtInstalacionEmitidaUseCase.execute(payload);
+  }
+
+  @MessagePattern('notifications.acometidas.informe_subido')
+  async notifyInformeSubido(
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      metadata?: Record<string, unknown>;
+    },
+  ) {
+    this.logger.log(
+      `[notifications.acometidas.informe_subido] solicitud: ${payload.solicitudId}`,
+    );
+    return await this.notifyInformeSubidoUseCase.execute(payload);
+  }
+
+  @MessagePattern('notifications.acometidas.informe_aprobado')
+  async notifyInformeAprobado(
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      metadata?: Record<string, unknown>;
+    },
+  ) {
+    this.logger.log(
+      `[notifications.acometidas.informe_aprobado] solicitud: ${payload.solicitudId}`,
+    );
+    return await this.notifyInformeAprobadoUseCase.execute(payload);
   }
 
   @MessagePattern('notifications.acometidas.acometida_confirmacion')
   async notifyAcometidaConfirmacion(
-    @Payload() payload: {
-      userId:          string;
-      solicitudId:     string;
-      nombre?:         string;
+    @Payload()
+    payload: {
+      userId: string;
+      solicitudId: string;
+      nombre?: string;
       numeroSolicitud?: string;
-      tipoAcometida?:  string;
-      tipoPersona?:    string;
-      direccion?:      string;
+      tipoAcometida?: string;
+      tipoPersona?: string;
+      direccion?: string;
       claveCatastral?: string;
-      numDocumentos?:  number;
+      numDocumentos?: number;
     },
   ) {
-    this.logger.log(`[notifications.acometidas.acometida_confirmacion] solicitud: ${payload.solicitudId}, user: ${payload.userId}`);
+    this.logger.log(
+      `[notifications.acometidas.acometida_confirmacion] solicitud: ${payload.solicitudId}, user: ${payload.userId}`,
+    );
     return await this.notifyAcometidaConfirmacionUseCase.execute({
-      userId:          payload.userId,
-      solicitudId:     payload.solicitudId,
-      nombre:          payload.nombre          ?? 'Cliente',
-      numeroSolicitud: payload.numeroSolicitud  ?? payload.solicitudId.slice(0, 8).toUpperCase(),
-      tipoAcometida:   payload.tipoAcometida   ?? 'Nueva Acometida de Agua Potable',
-      tipoPersona:     payload.tipoPersona     ?? 'No especificado',
-      direccion:       payload.direccion        ?? 'No especificada',
-      claveCatastral:  payload.claveCatastral  ?? 'No disponible',
-      numDocumentos:   payload.numDocumentos    ?? 0,
+      userId: payload.userId,
+      solicitudId: payload.solicitudId,
+      nombre: payload.nombre ?? 'Cliente',
+      numeroSolicitud:
+        payload.numeroSolicitud ??
+        payload.solicitudId.slice(0, 8).toUpperCase(),
+      tipoAcometida: payload.tipoAcometida ?? 'Nueva Acometida de Agua Potable',
+      tipoPersona: payload.tipoPersona ?? 'No especificado',
+      direccion: payload.direccion ?? 'No especificada',
+      claveCatastral: payload.claveCatastral ?? 'No disponible',
+      numDocumentos: payload.numDocumentos ?? 0,
     });
   }
 }
