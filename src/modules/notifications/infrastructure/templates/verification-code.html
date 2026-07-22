@@ -1,269 +1,368 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" xmlns:v="urn:schemas-microsoft-com:vml">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Código de Verificación — EPAA</title>
-  <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
-  <style>
-    body {
-      margin: 0; padding: 0;
-      background-color: #f0f4f8;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    .email-wrapper {
-      width: 100%; background: #f0f4f8; padding: 40px 0;
-    }
-    .email-container {
-      max-width: 580px; margin: 0 auto;
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-    }
-    /* ── Header ── */
-    .header {
-      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #0ea5e9 100%);
-      padding: 36px 40px 28px;
-      text-align: center;
-      position: relative;
-    }
-    .header::after {
-      content: '';
-      display: block;
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      height: 32px;
-      background: #ffffff;
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    }
-    .logo-wrapper {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .logo-icon {
-      width: 48px; height: 48px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 24px;
-    }
-    .logo-text {
-      color: #fff;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-    .header-title {
-      color: rgba(255,255,255,0.95);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      margin: 0;
-    }
-    /* ── Body ── */
-    .body { padding: 36px 40px; }
-    .greeting {
-      font-size: 22px; font-weight: 700;
-      color: #0f172a; margin: 0 0 10px;
-    }
-    .intro-text {
-      font-size: 15px; color: #475569;
-      line-height: 1.7; margin: 0 0 32px;
-    }
-    /* ── OTP Box ── */
-    .otp-wrapper {
-      background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-      border: 2px solid #bfdbfe;
-      border-radius: 16px;
-      padding: 28px;
-      text-align: center;
-      margin: 0 0 32px;
-    }
-    .otp-label {
-      font-size: 12px; font-weight: 700;
-      color: #2563eb;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin: 0 0 12px;
-    }
-    .otp-code {
-      font-size: 48px; font-weight: 900;
-      color: #1d4ed8;
-      letter-spacing: 12px;
-      font-family: 'Courier New', monospace;
-      margin: 0 0 12px;
-      display: block;
-    }
-    .otp-expiry {
-      font-size: 13px; color: #64748b;
-      margin: 0;
-    }
-    .otp-expiry strong { color: #ef4444; }
-    /* ── Warning box ── */
-    .warning-box {
-      background: #fff7ed;
-      border-left: 4px solid #f59e0b;
-      border-radius: 0 8px 8px 0;
-      padding: 14px 16px;
-      margin: 0 0 28px;
-    }
-    .warning-box p {
-      font-size: 13px; color: #78350f;
-      margin: 0; line-height: 1.6;
-    }
-    /* ── CTA Button ── */
-    .cta-wrapper { text-align: center; margin: 0 0 32px; }
-    .cta-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
-      color: #ffffff !important;
-      text-decoration: none;
-      font-size: 15px; font-weight: 700;
-      padding: 14px 36px;
-      border-radius: 10px;
-      letter-spacing: 0.3px;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
-    }
-    /* ── Steps section ── */
-    .steps-title {
-      font-size: 14px; font-weight: 700;
-      color: #0f172a; margin: 0 0 14px;
-    }
-    .step-row {
-      display: flex; align-items: flex-start;
-      gap: 14px; margin-bottom: 12px;
-    }
-    .step-num {
-      width: 28px; height: 28px;
-      background: #1d4ed8; color: #fff;
-      border-radius: 50%;
-      font-size: 13px; font-weight: 700;
-      display: inline-flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .step-text {
-      font-size: 14px; color: #475569;
-      line-height: 1.6; padding-top: 4px;
-    }
-    /* ── Divider ── */
-    .divider {
-      border: none; border-top: 1px solid #e2e8f0;
-      margin: 28px 0;
-    }
-    /* ── Footer ── */
-    .footer {
-      background: #f8fafc;
-      padding: 24px 40px;
-      text-align: center;
-      border-top: 1px solid #e2e8f0;
-    }
-    .footer-org {
-      font-size: 13px; font-weight: 700;
-      color: #1d4ed8; margin: 0 0 4px;
-    }
-    .footer-text {
-      font-size: 12px; color: #94a3b8;
-      margin: 0; line-height: 1.6;
-    }
-    .footer-links { margin-top: 12px; }
-    .footer-link {
-      font-size: 12px; color: #64748b;
-      text-decoration: none; margin: 0 8px;
-    }
-    @media (max-width: 600px) {
-      .email-container { border-radius: 0; }
-      .body, .footer { padding: 24px 20px; }
-      .header { padding: 28px 20px 24px; }
-      .otp-code { font-size: 36px; letter-spacing: 8px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="email-wrapper">
-    <div class="email-container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Código de Verificación — EPAA</title>
+    <!--[if mso
+      ]><noscript
+        ><xml
+          ><o:OfficeDocumentSettings
+            ><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings
+          ></xml
+        ></noscript
+      ><!
+    [endif]-->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .email-wrapper {
+        width: 100%;
+        background: #f0f4f8;
+        padding: 40px 0;
+        text-align: center;
+      }
+      .email-container {
+        max-width: 580px;
+        width: 100%;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+        display: inline-block;
+        text-align: left;
+      }
+      /* ── Header ── */
+      .header {
+        background: linear-gradient(
+          135deg,
+          #2563eb 0%,
+          #7c3aed 50%,
+          #6d28d9 100%
+        );
+        padding: 26px 30px 18px;
+        text-align: center;
+        position: relative;
+      }
+      .header::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 32px;
+        background: #ffffff;
+        border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+      }
+      .logo-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 6px;
+      }
 
-      <!-- ── Header ── -->
-      <div class="header">
-        <div class="logo-wrapper">
-          <div class="logo-icon">💧</div>
-          <span class="logo-text">EPAA</span>
-        </div>
-        <p class="header-title">Empresa Pública de Agua y Alcantarillado de Ambato</p>
-      </div>
+      .logo-image {
+        width: auto;
+        height: 100px;
+        display: inline-block;
+        vertical-align: middle;
+      }
 
-      <!-- ── Body ── -->
-      <div class="body">
-        <h1 class="greeting">Hola, {{nombre}} 👋</h1>
-        <p class="intro-text">
-          Gracias por registrarte en el <strong>Portal de Clientes EPAA</strong>.
-          Para completar tu registro y activar tu cuenta, ingresa el siguiente
-          código de verificación:
-        </p>
-
-        <!-- OTP Box -->
-        <div class="otp-wrapper">
-          <p class="otp-label">🔐 Tu código de verificación</p>
-          <span class="otp-code">{{codigo}}</span>
-          <p class="otp-expiry">
-            Este código expira en <strong>{{expiracionMinutos}} minutos</strong>
+      .logo-text {
+        vertical-align: middle;
+      }
+      .logo-text {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+      .header-title {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        margin: 0;
+      }
+      /* ── Body ── */
+      .body {
+        padding: 36px 40px;
+      }
+      .greeting {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 10px;
+      }
+      .intro-text {
+        font-size: 15px;
+        color: #475569;
+        line-height: 1.7;
+        margin: 0 0 32px;
+      }
+      /* ── OTP Box ── */
+      .otp-wrapper {
+        background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+        border: 2px solid #bfdbfe;
+        border-radius: 16px;
+        padding: 28px;
+        text-align: center;
+        margin: 0 0 32px;
+      }
+      .otp-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #2563eb;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 0 0 12px;
+      }
+      .otp-code {
+        font-size: 48px;
+        font-weight: 900;
+        color: #1d4ed8;
+        letter-spacing: 12px;
+        font-family: 'Courier New', monospace;
+        margin: 0 0 12px;
+        display: block;
+      }
+      .otp-expiry {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0;
+      }
+      .otp-expiry strong {
+        color: #ef4444;
+      }
+      /* ── Warning box ── */
+      .warning-box {
+        background: #fff7ed;
+        border-left: 4px solid #f59e0b;
+        border-radius: 0 8px 8px 0;
+        padding: 14px 16px;
+        margin: 0 0 28px;
+      }
+      .warning-box p {
+        font-size: 13px;
+        color: #78350f;
+        margin: 0;
+        line-height: 1.6;
+      }
+      /* ── CTA Button ── */
+      .cta-wrapper {
+        text-align: center;
+        margin: 0 0 32px;
+      }
+      .cta-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #1d4ed8, #2563eb);
+        color: #ffffff !important;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 14px 36px;
+        border-radius: 10px;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+      }
+      /* ── Steps section ── */
+      .steps-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 14px;
+      }
+      .step-row {
+        display: table;
+        width: 100%;
+        margin-bottom: 12px;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        background: #1d4ed8;
+        color: #fff;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 700;
+        display: table-cell;
+        text-align: center;
+        vertical-align: top;
+        line-height: 28px;
+        min-width: 28px;
+      }
+      .step-text {
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.6;
+        display: table-cell;
+        vertical-align: top;
+        padding-top: 4px;
+        padding-left: 14px;
+      }
+      /* ── Divider ── */
+      .divider {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 28px 0;
+      }
+      /* ── Footer ── */
+      .footer {
+        background: #f8fafc;
+        padding: 24px 40px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+      }
+      .footer-org {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1d4ed8;
+        margin: 0 0 4px;
+      }
+      .footer-text {
+        font-size: 12px;
+        color: #94a3b8;
+        margin: 0;
+        line-height: 1.6;
+      }
+      .footer-links {
+        margin-top: 12px;
+      }
+      .footer-link {
+        font-size: 12px;
+        color: #64748b;
+        text-decoration: none;
+        margin: 0 8px;
+      }
+      @media (max-width: 600px) {
+        .email-container {
+          border-radius: 0;
+        }
+        .body,
+        .footer {
+          padding: 24px 20px;
+        }
+        .header {
+          padding: 28px 20px 24px;
+        }
+        .otp-code {
+          font-size: 36px;
+          letter-spacing: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <div class="email-container">
+        <!-- ── Header ── -->
+        <div class="header">
+          <div class="logo-wrapper">
+            <div class="logo-icon">
+              <img class="logo-image" src="cid:epaa-logo" alt="EPAA" />
+            </div>
+          </div>
+          <p class="logo-text">
+            Empresa Pública de Agua Potable y Alcantarillado de Antonio Ante
           </p>
         </div>
 
-        <!-- Warning -->
-        <div class="warning-box">
-          <p>
-            ⚠️ <strong>No compartas este código con nadie.</strong>
-            EPAA nunca te pedirá tu código por teléfono, correo o redes sociales.
-            Si no solicitaste este registro, puedes ignorar este mensaje.
+        <!-- ── Body ── -->
+        <div class="body">
+          <h1 class="greeting">Hola, {{nombre}} 👋</h1>
+          <p class="intro-text">
+            Gracias por registrarte en el
+            <strong>Portal de Clientes EPAA-AA</strong>. Para completar tu
+            registro y activar tu cuenta, ingresa el siguiente código de
+            verificación:
           </p>
+
+          <!-- OTP Box -->
+          <div class="otp-wrapper">
+            <p class="otp-label">🔐 Tu código de verificación</p>
+            <span class="otp-code">{{codigo}}</span>
+            <p class="otp-expiry">
+              Este código expira en
+              <strong>{{expiracionMinutos}} minutos</strong>
+            </p>
+          </div>
+
+          <!-- Warning -->
+          <div class="warning-box">
+            <p>
+              ⚠️ <strong>No compartas este código con nadie.</strong>
+              La EPAA-AA nunca te pedirá tu código por teléfono, correo o redes
+              sociales. Si no solicitaste este registro, puedes ignorar este
+              mensaje.
+            </p>
+          </div>
+
+          <!-- CTA 
+          <div class="cta-wrapper">
+            <a href="{{portalUrl}}" class="cta-btn">
+              Ir al Portal de Clientes →
+            </a>
+          </div>
+          -->
+
+          <hr class="divider" />
+
+          <!-- Steps -->
+          <p class="steps-title">¿Cómo completar tu registro?</p>
+
+          <div class="step-row">
+            <span class="step-num">1</span>
+            <span class="step-text"
+              >Abre el portal de clientes EPAA-AA en tu navegador, o tu
+              aplicación móvil</span
+            >
+          </div>
+          <div class="step-row">
+            <span class="step-num">2</span>
+            <span class="step-text"
+              >Introduce el código de verificación en el campo indicado</span
+            >
+          </div>
+          <div class="step-row">
+            <span class="step-num">3</span>
+            <span class="step-text"
+              >Haz clic en <strong>Confirmar</strong> para activar tu
+              cuenta</span
+            >
+          </div>
         </div>
 
-        <!-- CTA -->
-        <div class="cta-wrapper">
-          <a href="{{portalUrl}}" class="cta-btn">
-            Ir al Portal de Clientes →
-          </a>
-        </div>
-
-        <hr class="divider" />
-
-        <!-- Steps -->
-        <p class="steps-title">¿Cómo completar tu registro?</p>
-
-        <div class="step-row">
-          <span class="step-num">1</span>
-          <span class="step-text">Abre el portal de clientes EPAA en tu navegador</span>
-        </div>
-        <div class="step-row">
-          <span class="step-num">2</span>
-          <span class="step-text">Introduce el código de verificación en el campo indicado</span>
-        </div>
-        <div class="step-row">
-          <span class="step-num">3</span>
-          <span class="step-text">Haz clic en <strong>Confirmar</strong> para activar tu cuenta</span>
+        <!-- ── Footer ── -->
+        <div class="footer">
+          <p class="footer-org">
+            EPAA-AA — Empresa Pública de Agua Potable y Alcantarillado de
+            Antonio Ante
+          </p>
+          <p class="footer-text">
+            Este correo fue enviado automáticamente. Por favor no respondas a
+            este mensaje.<br />
+            Si tienes problemas, contáctanos en
+            <a href="mailto:soporte@epaa.gob.ec" style="color: #1d4ed8"
+              >soporte@epaa.gob.ec</a
+            >
+          </p>
+          <div class="footer-links">
+            <a href="{{portalUrl}}" class="footer-link">Portal de Clientes</a>
+            <a href="{{portalUrl}}/privacy" class="footer-link">Privacidad</a>
+            <a href="{{portalUrl}}/terms" class="footer-link">Términos</a>
+          </div>
         </div>
       </div>
-
-      <!-- ── Footer ── -->
-      <div class="footer">
-        <p class="footer-org">EPAA — Empresa Pública de Agua y Alcantarillado de Ambato</p>
-        <p class="footer-text">
-          Este correo fue enviado automáticamente. Por favor no respondas a este mensaje.<br />
-          Si tienes problemas, contáctanos en <a href="mailto:soporte@epaa.gob.ec" style="color:#1d4ed8;">soporte@epaa.gob.ec</a>
-        </p>
-        <div class="footer-links">
-          <a href="{{portalUrl}}" class="footer-link">Portal de Clientes</a>
-          <a href="{{portalUrl}}/privacy" class="footer-link">Privacidad</a>
-          <a href="{{portalUrl}}/terms" class="footer-link">Términos</a>
-        </div>
-      </div>
-
     </div>
-  </div>
-</body>
+  </body>
 </html>

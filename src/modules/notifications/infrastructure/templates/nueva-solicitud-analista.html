@@ -1,186 +1,468 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Nueva Solicitud Asignada — EPAA</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1e293b; }
-    .wrapper { max-width: 640px; margin: 32px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Nueva Solicitud Asignada — EPAA</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f0f4f8;
+        color: #1e293b;
+        text-align: center;
+      }
+      .wrapper {
+        max-width: 640px;
+        margin: 32px auto;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        text-align: left;
+      }
 
-    /* ── HEADER ── */
-    .header { background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%); padding: 40px 32px 32px; text-align: center; }
-    .header-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 6px 16px; font-size: 12px; font-weight: 600; color: #93c5fd; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
-    .header-icon { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; line-height: 64px; }
-    .header-title { color: #ffffff; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-    .header-subtitle { color: #bfdbfe; font-size: 14px; }
+      /* ── HEADER ── */
+      .header {
+        background: linear-gradient(
+          135deg,
+          #2563eb 0%,
+          #7c3aed 50%,
+          #6d28d9 100%
+        );
+        padding: 40px 32px 32px;
+        text-align: center;
+      }
+      .logo-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 12px;
+      }
+      .logo-image {
+        width: auto;
+        height: 100px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .logo-text {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 320px;
+      }
+      .header-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 6px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #93c5fd;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+      .header-icon {
+        width: 64px;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        display: block;
+        font-size: 28px;
+        line-height: 64px;
+        text-align: center;
+      }
+      .header-title {
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .header-subtitle {
+        color: #bfdbfe;
+        font-size: 14px;
+      }
 
-    /* ── ALERT BANNER ── */
-    .alert-banner { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 14px 24px; display: flex; align-items: center; gap: 10px; }
-    .alert-banner span { font-size: 13px; color: #92400e; font-weight: 600; }
+      /* ── ALERT BANNER ── */
+      .alert-banner {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 14px 24px;
+        display: block;
+      }
+      .alert-banner span {
+        font-size: 13px;
+        color: #92400e;
+        font-weight: 600;
+        display: block;
+      }
 
-    /* ── BODY ── */
-    .body { padding: 32px; }
-    .greeting { font-size: 16px; color: #374151; margin-bottom: 8px; }
-    .greeting strong { color: #1e3a5f; }
-    .intro { font-size: 14px; color: #6b7280; line-height: 1.7; margin-bottom: 28px; }
+      /* ── BODY ── */
+      .body {
+        padding: 32px;
+      }
+      .greeting {
+        font-size: 16px;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+      .greeting strong {
+        color: #1e3a5f;
+      }
+      .intro {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.7;
+        margin-bottom: 28px;
+      }
 
-    /* ── SOL CARD ── */
-    .sol-card { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 20px 24px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; }
-    .sol-card-label { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .sol-card-number { font-size: 20px; font-weight: 800; color: #1d4ed8; letter-spacing: 0.5px; }
-    .sol-card-badge { background: #dc2626; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+      /* ── SOL CARD ── */
+      .sol-card {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+        display: block;
+        overflow: hidden;
+      }
+      .sol-card-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+      .sol-card-number {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1d4ed8;
+        letter-spacing: 0.5px;
+      }
+      .sol-card-badge {
+        background: #dc2626;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        float: right;
+        margin-top: 4px;
+      }
 
-    /* ── SECTION TITLE ── */
-    .section-title { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f3f4f6; }
+      /* ── SECTION TITLE ── */
+      .section-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f3f4f6;
+      }
 
-    /* ── INFO GRID ── */
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
-    .info-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
-    .info-item-label { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
-    .info-item-value { font-size: 13px; font-weight: 600; color: #1e293b; }
-    .info-item.full { grid-column: 1 / -1; }
+      /* ── INFO GRID ── */
+      .info-grid {
+        display: block;
+        margin-bottom: 16px;
+      }
+      .info-item {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: inline-block;
+        width: 47%;
+        vertical-align: top;
+        margin: 0 1% 12px 0;
+        box-sizing: border-box;
+      }
+      .info-item-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 4px;
+      }
+      .info-item-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .info-item.full {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+      }
 
-    /* ── DOCS PILL ── */
-    .docs-badge { display: inline-flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-weight: 600; color: #166534; margin-bottom: 28px; }
-    .docs-badge::before { content: "📎"; font-size: 15px; }
+      /* ── DOCS PILL ── */
+      .docs-badge {
+        display: inline-block;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #166534;
+        margin-bottom: 28px;
+      }
+      .docs-badge::before {
+        content: '📎';
+        font-size: 15px;
+        margin-right: 8px;
+      }
 
-    /* ── ACTION BUTTONS ── */
-    .actions { display: flex; gap: 12px; margin-bottom: 28px; }
-    .btn-primary { flex: 1; display: block; background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 14px 20px; border-radius: 10px; text-align: center; }
-    .btn-secondary { flex: 1; display: block; background: #f8fafc; border: 1.5px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 14px; font-weight: 600; padding: 14px 20px; border-radius: 10px; text-align: center; }
+      /* ── ACTION BUTTONS ── */
+      .actions {
+        display: block;
+        margin-bottom: 28px;
+      }
+      .btn-primary {
+        display: block;
+        background: linear-gradient(135deg, #1d4ed8, #2563eb);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 14px 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      .btn-secondary {
+        display: block;
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
+        color: #374151;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 14px 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
 
-    /* ── PROCESS TIMELINE ── */
-    .timeline { margin-bottom: 28px; }
-    .timeline-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
-    .timeline-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-    .timeline-dot.active { background: #fef3c7; border: 2px solid #f59e0b; }
-    .timeline-dot.pending { background: #f1f5f9; border: 2px solid #e2e8f0; }
-    .timeline-content-title { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-    .timeline-content-desc { font-size: 12px; color: #6b7280; }
+      /* ── PROCESS TIMELINE ── */
+      .timeline {
+        margin-bottom: 28px;
+      }
+      .timeline-item {
+        display: table;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .timeline-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: table-cell;
+        font-size: 13px;
+        text-align: center;
+        vertical-align: top;
+        line-height: 32px;
+        min-width: 32px;
+      }
+      .timeline-dot + div {
+        display: table-cell;
+        vertical-align: top;
+        padding-left: 14px;
+      }
+      .timeline-dot.active {
+        background: #fef3c7;
+        border: 2px solid #f59e0b;
+      }
+      .timeline-dot.pending {
+        background: #f1f5f9;
+        border: 2px solid #e2e8f0;
+      }
+      .timeline-content-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 2px;
+      }
+      .timeline-content-desc {
+        font-size: 12px;
+        color: #6b7280;
+      }
 
-    /* ── FOOTER ── */
-    .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 24px 32px; text-align: center; }
-    .footer p { font-size: 11px; color: #9ca3af; line-height: 1.8; }
-    .footer strong { color: #6b7280; }
-  </style>
-</head>
-<body>
-<div class="wrapper">
-
-  <!-- ── HEADER ── -->
-  <div class="header">
-    <div class="header-badge">🔔 Acción Requerida</div>
-    <div class="header-icon">📋</div>
-    <div class="header-title">Nueva Solicitud Asignada</div>
-    <div class="header-subtitle">Revisión documental pendiente — Acometidas</div>
-  </div>
-
-  <!-- ── ALERT ── -->
-  <div class="alert-banner">
-    <span>⚠️ Esta solicitud ha sido asignada a usted por el sistema. Se requiere su revisión a la brevedad posible.</span>
-  </div>
-
-  <!-- ── BODY ── -->
-  <div class="body">
-
-    <p class="greeting">Estimado/a <strong>{{nombreAnalista}}</strong>,</p>
-    <p class="intro">
-      El sistema SIGEPAA le ha asignado automáticamente una nueva solicitud de acometida 
-      de agua potable. A continuación encontrará los detalles del trámite para proceder 
-      con la revisión documental.
-    </p>
-
-    <!-- Número de solicitud -->
-    <div class="sol-card">
-      <div>
-        <div class="sol-card-label">N° de Solicitud</div>
-        <div class="sol-card-number">{{numeroSolicitud}}</div>
-      </div>
-      <div class="sol-card-badge">🕐 Pendiente Revisión</div>
-    </div>
-
-    <!-- Detalles del trámite -->
-    <p class="section-title">📁 Datos del Trámite</p>
-    <div class="info-grid">
-      <div class="info-item">
-        <div class="info-item-label">Tipo de Acometida</div>
-        <div class="info-item-value">{{tipoAcometida}}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-item-label">Tipo de Persona</div>
-        <div class="info-item-value">{{tipoPersona}}</div>
-      </div>
-      <div class="info-item full">
-        <div class="info-item-label">Dirección del Predio</div>
-        <div class="info-item-value">{{direccion}}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-item-label">Clave Catastral</div>
-        <div class="info-item-value">{{claveCatastral}}</div>
-      </div>
-      <div class="info-item">
-        <div class="info-item-label">Fecha de Recepción</div>
-        <div class="info-item-value">{{fechaSolicitud}}</div>
-      </div>
-    </div>
-
-    <!-- Documentos -->
-    <div class="docs-badge">{{numDocumentos}} documento(s) adjunto(s) para revisión</div>
-
-    <!-- Acciones -->
-    <p class="section-title">🚀 Acciones</p>
-    <div class="actions">
-      <a href="{{urlRevision}}" class="btn-primary">Revisar Solicitud</a>
-      <a href="{{urlPanel}}" class="btn-secondary">Ver Panel</a>
-    </div>
-
-    <!-- Timeline del proceso -->
-    <p class="section-title">📍 Flujo del Proceso BPMN</p>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-dot active">⏳</div>
-        <div>
-          <div class="timeline-content-title">Fase 2 — Revisión Documental</div>
-          <div class="timeline-content-desc">Su tarea actual: validar los documentos adjuntos</div>
+      /* ── FOOTER ── */
+      .footer {
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        padding: 24px 32px;
+        text-align: center;
+      }
+      .footer p {
+        font-size: 11px;
+        color: #9ca3af;
+        line-height: 1.8;
+      }
+      .footer strong {
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- ── HEADER ── -->
+      <div class="header">
+        <div class="logo-wrapper">
+          <img class="logo-image" src="cid:epaa-logo" alt="EPAA" />
+        </div>
+        <p class="logo-text">
+          Empresa Pública de Agua Potable y Alcantarillado de Antonio Ante
+        </p>
+        <div class="header-badge">🔔 Acción Requerida</div>
+        <div class="header-icon">📋</div>
+        <div class="header-title">Nueva Solicitud Asignada</div>
+        <div class="header-subtitle">
+          Revisión documental pendiente — Acometidas
         </div>
       </div>
-      <div class="timeline-item">
-        <div class="timeline-dot pending">3</div>
-        <div>
-          <div class="timeline-content-title">Fase 3 — Aprobación / Rechazo</div>
-          <div class="timeline-content-desc">Emitir resolución de documentación</div>
+
+      <!-- ── ALERT ── -->
+      <div class="alert-banner">
+        <span
+          >⚠️ Esta solicitud ha sido asignada a usted por el sistema. Se
+          requiere su revisión a la brevedad posible.</span
+        >
+      </div>
+
+      <!-- ── BODY ── -->
+      <div class="body">
+        <p class="greeting">Estimado/a <strong>{{nombreAnalista}}</strong>,</p>
+        <p class="intro">
+          El sistema EPAA-AA le ha asignado automáticamente una nueva solicitud
+          de acometida de agua potable. A continuación encontrará los detalles
+          del trámite para proceder con la revisión documental.
+        </p>
+
+        <!-- Número de solicitud -->
+        <div class="sol-card">
+          <div>
+            <div class="sol-card-label">N° de Solicitud</div>
+            <div class="sol-card-number">{{numeroSolicitud}}</div>
+          </div>
+          <div class="sol-card-badge">🕐 Pendiente Revisión</div>
+        </div>
+
+        <!-- Detalles del trámite -->
+        <p class="section-title">📁 Datos del Trámite</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-item-label">Tipo de Acometida</div>
+            <div class="info-item-value">{{tipoAcometida}}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Tipo de Persona</div>
+            <div class="info-item-value">{{tipoPersona}}</div>
+          </div>
+          <div class="info-item full">
+            <div class="info-item-label">Dirección del Predio</div>
+            <div class="info-item-value">{{direccion}}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Clave Catastral</div>
+            <div class="info-item-value">{{claveCatastral}}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Fecha de Recepción</div>
+            <div class="info-item-value">{{fechaSolicitud}}</div>
+          </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="docs-badge">
+          {{numDocumentos}} documento(s) adjunto(s) para revisión
+        </div>
+
+        <!-- Acciones -->
+        <p class="section-title">🚀 Acciones</p>
+        <div class="actions">
+          <a href="{{urlRevision}}" class="btn-primary">Revisar Solicitud</a>
+          <a href="{{urlPanel}}" class="btn-secondary">Ver Panel</a>
+        </div>
+
+        <!-- Timeline del proceso -->
+        <p class="section-title">📍 Flujo del Proceso BPMN</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot active">⏳</div>
+            <div>
+              <div class="timeline-content-title">
+                Fase 2 — Revisión Documental
+              </div>
+              <div class="timeline-content-desc">
+                Su tarea actual: validar los documentos adjuntos
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot pending">3</div>
+            <div>
+              <div class="timeline-content-title">
+                Fase 3 — Aprobación / Rechazo
+              </div>
+              <div class="timeline-content-desc">
+                Emitir resolución de documentación
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot pending">4</div>
+            <div>
+              <div class="timeline-content-title">
+                Fase 4 — Inspección Técnica
+              </div>
+              <div class="timeline-content-desc">
+                Asignación de técnico e inspección en campo
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot pending">✔</div>
+            <div>
+              <div class="timeline-content-title">
+                Fases 5-14 — Instalación y Activación
+              </div>
+              <div class="timeline-content-desc">
+                Facturación, contrato, instalación y suministro activo
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="timeline-item">
-        <div class="timeline-dot pending">4</div>
-        <div>
-          <div class="timeline-content-title">Fase 4 — Inspección Técnica</div>
-          <div class="timeline-content-desc">Asignación de técnico e inspección en campo</div>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot pending">✔</div>
-        <div>
-          <div class="timeline-content-title">Fases 5-14 — Instalación y Activación</div>
-          <div class="timeline-content-desc">Facturación, contrato, instalación y suministro activo</div>
-        </div>
+      <!-- /body -->
+
+      <!-- ── FOOTER ── -->
+      <div class="footer">
+        <p>
+          Este correo fue generado automáticamente por
+          <strong>EPAA-AA</strong>.<br />
+          Empresa Pública de Agua y Alcantarillado — <strong>EPAA-AA</strong> |
+          Sistema Integrado de Gestión<br />
+          Si tiene dudas, contacte a soporte técnico:
+          <strong>soporte@epaa.gob.ec</strong>
+        </p>
       </div>
     </div>
-
-  </div><!-- /body -->
-
-  <!-- ── FOOTER ── -->
-  <div class="footer">
-    <p>
-      Este correo fue generado automáticamente por <strong>SIGEPAA</strong>.<br/>
-      Empresa Pública de Agua y Alcantarillado — EPAA | Sistema Integrado de Gestión<br/>
-      Si tiene dudas, contacte a soporte técnico: <strong>soporte@epaa.gob.ec</strong>
-    </p>
-  </div>
-
-</div>
-</body>
+  </body>
 </html>

@@ -1,5 +1,10 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
-import { INotificationChannelSender, ChannelSendResult } from '../../../domain/contracts/channel-sender.interface';
+import * as fs from 'fs';
+import * as path from 'path';
+import {
+  INotificationChannelSender,
+  ChannelSendResult,
+} from '../../../domain/contracts/channel-sender.interface';
 import { IEmailSender } from '../../../domain/contracts/email-sender.interface';
 import { INotificationRepository } from '../../../domain/contracts/notification.interface.repository';
 import { ITemplateService } from '../../../domain/contracts/template.service.interface';
@@ -11,6 +16,8 @@ import { ITemplateService } from '../../../domain/contracts/template.service.int
  *  - Soporta templates HTML cuando el payload incluye `metadata.templateId`.
  *  - Si no hay template, envía el `body` plano (retrocompatible).
  *  - Soporta archivos adjuntos vía `metadata.attachments`.
+ *  - Embebe el logo institucional como adjunto inline (Content-ID) para que se
+ *    muestre en cualquier cliente de correo, sin depender de una URL pública.
  *
  * SOLID:
  *  SRP — solo despacha emails; la renderización la delega a ITemplateService
@@ -20,6 +27,16 @@ import { ITemplateService } from '../../../domain/contracts/template.service.int
 @Injectable()
 export class EmailChannelSender implements INotificationChannelSender {
   private readonly logger = new Logger(EmailChannelSender.name);
+
+  /** Content-ID referenciado por los templates como `src="cid:epaa-logo"`. */
+  private static readonly LOGO_CID = 'epaa-logo';
+  /** Ubicación del logo, resuelta desde la raíz del proyecto (funciona en dev y en el contenedor de producción). */
+  private static readonly LOGO_PATH = path.join(
+    process.cwd(),
+    'public',
+    'images',
+    'epaa.png',
+  );
 
   constructor(
     @Inject('IEmailSender')
@@ -46,10 +63,13 @@ export class EmailChannelSender implements INotificationChannelSender {
     // 1. Resolve recipient email
     const email = await this.repository.findUserEmail(userId);
     if (!email) {
-      this.logger.warn(`[EMAIL SENDER] Usuario ${userId} no tiene un email activo registrado.`);
+      this.logger.warn(
+        `[EMAIL SENDER] Usuario ${userId} no tiene un email activo registrado.`,
+      );
       return {
         success: false,
-        errorMessage: 'El usuario no tiene un correo electrónico activo registrado.',
+        errorMessage:
+          'El usuario no tiene un correo electrónico activo registrado.',
       };
     }
 
@@ -62,15 +82,38 @@ export class EmailChannelSender implements INotificationChannelSender {
           metadata.templateId as string,
           metadata.templateVars ?? {},
         );
-        this.logger.log(`[EMAIL SENDER] Template "${metadata.templateId}" rendered for user ${userId}`);
+        this.logger.log(
+          `[EMAIL SENDER] Template "${metadata.templateId}" rendered for user ${userId}`,
+        );
       } catch (err: any) {
-        this.logger.warn(`[EMAIL SENDER] Template render failed: ${err.message}. Falling back to plain body.`);
+        this.logger.warn(
+          `[EMAIL SENDER] Template render failed: ${err.message}. Falling back to plain body.`,
+        );
       }
     }
 
     // 3. Resolve attachments
-    const attachments: Array<{ filename: string; content: any }> =
-      metadata?.attachments ?? [];
+    const attachments: Array<{
+      filename: string;
+      content?: any;
+      path?: string;
+      cid?: string;
+    }> = metadata?.attachments ?? [];
+
+    // 3.1 If we rendered an HTML template, embed the institutional logo inline
+    //     (cid) so it renders correctly in every mail client, including in
+    //     production where the logo is not served over a public URL.
+    if (htmlBody && fs.existsSync(EmailChannelSender.LOGO_PATH)) {
+      attachments.push({
+        filename: 'epaa.png',
+        path: EmailChannelSender.LOGO_PATH,
+        cid: EmailChannelSender.LOGO_CID,
+      });
+    } else if (htmlBody) {
+      this.logger.warn(
+        `[EMAIL SENDER] Logo no encontrado en ${EmailChannelSender.LOGO_PATH}; se enviará el correo sin logo.`,
+      );
+    }
 
     // 4. Send
     const result = await this.emailSender.sendEmail(email, title, body, {
@@ -79,9 +122,9 @@ export class EmailChannelSender implements INotificationChannelSender {
     });
 
     return {
-      success:         result.success,
-      messageId:       result.messageId,
-      errorMessage:    result.errorMessage,
+      success: result.success,
+      messageId: result.messageId,
+      errorMessage: result.errorMessage,
       providerResponse: result.providerResponse,
     };
   }

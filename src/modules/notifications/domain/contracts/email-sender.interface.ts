@@ -18,7 +18,12 @@ export interface IEmailSender {
     options?: {
       from?: string;
       html?: string;
-      attachments?: Array<{ filename: string; content: any }>;
-    }
+      attachments?: Array<{
+        filename: string;
+        content?: any;
+        path?: string;
+        cid?: string;
+      }>;
+    },
   ): Promise<EmailSendResult>;
 }

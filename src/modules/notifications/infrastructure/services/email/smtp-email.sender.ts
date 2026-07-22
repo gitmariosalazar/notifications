@@ -1,5 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IEmailSender, EmailSendResult } from '../../../domain/contracts/email-sender.interface';
+import {
+  IEmailSender,
+  EmailSendResult,
+} from '../../../domain/contracts/email-sender.interface';
 import { environments } from '../../../../../settings/environments/environments';
 import * as nodemailer from 'nodemailer';
 
@@ -34,23 +37,38 @@ export class SmtpEmailSender implements IEmailSender {
     to: string,
     subject: string,
     body: string,
-    options?: { from?: string; html?: string }
+    options?: {
+      from?: string;
+      html?: string;
+      attachments?: Array<{
+        filename: string;
+        content?: any;
+        path?: string;
+        cid?: string;
+      }>;
+    },
   ): Promise<EmailSendResult> {
     try {
-      const fromAddress = options?.from || process.env.SMTP_FROM || 'SIGEPAA <no-reply@sigepaa.com>';
-      
+      const fromAddress =
+        options?.from ||
+        process.env.SMTP_FROM ||
+        'EPAA-AA <no-reply@sigepaa.com>';
+
       const mailOptions: nodemailer.SendMailOptions = {
         from: fromAddress,
         to,
         subject,
         text: body,
         html: options?.html || body,
+        attachments: options?.attachments,
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      
-      this.logger.log(`[SMTP EMAIL] Mensaje enviado exitosamente. ID: ${info.messageId}`);
-      
+
+      this.logger.log(
+        `[SMTP EMAIL] Mensaje enviado exitosamente. ID: ${info.messageId}`,
+      );
+
       return {
         success: true,
         messageId: info.messageId,
@@ -61,7 +79,9 @@ export class SmtpEmailSender implements IEmailSender {
         },
       };
     } catch (error: any) {
-      this.logger.error(`[SMTP EMAIL ERROR] Fallo al enviar correo a ${to}: ${error.message}`);
+      this.logger.error(
+        `[SMTP EMAIL ERROR] Fallo al enviar correo a ${to}: ${error.message}`,
+      );
       return {
         success: false,
         errorMessage: error.message,
